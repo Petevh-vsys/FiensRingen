@@ -72,7 +72,25 @@ class MainActivity:Activity() {
     private var photoPreview:ImageView?=null
     private val money=NumberFormat.getCurrencyInstance(Locale.forLanguageTag("nl-BE"))
     private val PICK_PHOTO=41;private val EXPORT=42;private val IMPORT=43
-    override fun onCreate(savedInstanceState:Bundle?) {super.onCreate(savedInstanceState);db=Database(this);dashboard()}
+    override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    try {
+        db = Database(this)
+        dashboard()
+    } catch (e: Exception) {
+        android.util.Log.e("Ringenbeheer", "Opstartfout", e)
+
+        AlertDialog.Builder(this)
+            .setTitle("Ringenbeheer - Opstartfout")
+            .setMessage(
+                e.javaClass.simpleName + "\n\n" +
+                (e.message ?: "Onbekende fout")
+            )
+            .setPositiveButton("Sluiten") { _, _ -> finish() }
+            .show()
+    }
+}
     private fun text(s:String,size:Float=16f):TextView=TextView(this).apply {text=s;textSize=size;setTextColor(Color.rgb(25,43,60));setPadding(0,8,0,8)}
     private fun button(label:String,action:()->Unit):Button=Button(this).apply {text=label;setOnClickListener{action()}}
     private fun field(hint:String,value:String="",decimal:Boolean=false):EditText=EditText(this).apply {
