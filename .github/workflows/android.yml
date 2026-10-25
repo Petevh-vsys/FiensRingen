@@ -32,6 +32,10 @@ jobs:
 
       - name: APK bouwen
         run: gradle :app:assembleDebug
+        - name: APK controleren
+  run: |
+    APK=app/build/outputs/apk/debug/app-debug.apk
+    $ANDROID_HOME/build-tools/35.0.0/aapt dump badging "$APK"
 
       - name: APK beschikbaar maken
         uses: actions/upload-artifact@v4
